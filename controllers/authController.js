@@ -39,8 +39,8 @@ const Otp_request = async (req, res) => {
 
 const verifyotp_request = async (req, res) => {
   try {
-    const { email, otp } = req.body;
-    const result = await verifyOtp(email, otp);
+    const { email_id, otp } = req.body;
+    const result = await verifyOtp(email_id, otp);
     res.status(result.status).json({code: result.status,message: result.message,...(result?.error && { error: result.error }),
     });
   } catch (err) {
