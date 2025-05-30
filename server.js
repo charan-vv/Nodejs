@@ -14,12 +14,14 @@ connectDB();
 
 
 // using routes
-app.use("/", custome_routes);
+app.use("/budget/backend/v1", custome_routes);
 
 
 
 
 const port = process.env.PORT;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const host = process.env.HOST;
+
+app.listen(port,host, () => {
+  console.log(`Server is running on port ${port}  ${host}`);
 });
