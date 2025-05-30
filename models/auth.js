@@ -3,11 +3,11 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 
 const auth_schema = new mongoose.Schema({
-  uid: { type: String, default: uuidv4,unique: true},
-  name: {type:String,trim:true},
-  user_name: { type: String, required: true,trim: true },
-  role: {type: String,enum: ['web', 'mobile'],required: true,default: 'web'},
-  email_id: {type: String,required: true,unique: true,lowercase: true,trim: true,
+  uid: { type: String, default: uuidv4, unique: true},
+  name: {type: String, trim: true},
+  user_name: { type: String, required: true, trim: true },
+  role: {type: String, enum: ['web', 'mobile'], required: true, default: 'web'},
+  email_id: {type: String, required: true, unique: true, lowercase: true, trim: true,
     validate: {
       validator: function(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -15,7 +15,7 @@ const auth_schema = new mongoose.Schema({
       message: 'Please enter a valid email'
     }
   },
-  password: { type: String,required: true,minlength: 8},
+  password: { type: String, required: true, minlength: 8},
   phone: {
     country_code: { type: String, default: "+1" },
     phone_number: { type: String, validate: {validator: function(phone) {
@@ -25,7 +25,7 @@ const auth_schema = new mongoose.Schema({
       }
     },
   },
-  otp_verified:{type:Boolean,default:false},
+  otp_verified: {type: Boolean, default: false},
   created_at: { type: Date, default: Date.now},
   created_by: { type: Number, default: 1 },
   is_deleted: { type: Boolean, default: false},
@@ -33,7 +33,7 @@ const auth_schema = new mongoose.Schema({
   last_login: { type: Date }
 });
 
-// Hash password before saving
+// Hash password before saving (for new documents)
 auth_schema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
@@ -44,6 +44,75 @@ auth_schema.pre('save', async function(next) {
   } catch (error) {
     next(error);
   }
+});
+
+// Hash password before updating (for findOneAndUpdate)
+auth_schema.pre('findOneAndUpdate', async function(next) {
+  const update = this.getUpdate();
+  
+  if (update.password || (update.$set && update.$set.password)) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const passwordToHash = update.password || update.$set.password;
+      const hashedPassword = await bcrypt.hash(passwordToHash, salt);
+      
+      if (update.password) {
+        update.password = hashedPassword;
+      }
+      if (update.$set && update.$set.password) {
+        update.$set.password = hashedPassword;
+      }
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
+
+// Hash password before updating (for updateOne)
+auth_schema.pre('updateOne', async function(next) {
+  const update = this.getUpdate();
+  
+  if (update.password || (update.$set && update.$set.password)) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const passwordToHash = update.password || update.$set.password;
+      const hashedPassword = await bcrypt.hash(passwordToHash, salt);
+      
+      if (update.password) {
+        update.password = hashedPassword;
+      }
+      if (update.$set && update.$set.password) {
+        update.$set.password = hashedPassword;
+      }
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
+
+// Hash password before updating (for updateMany)
+auth_schema.pre('updateMany', async function(next) {
+  const update = this.getUpdate();
+  
+  if (update.password || (update.$set && update.$set.password)) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const passwordToHash = update.password || update.$set.password;
+      const hashedPassword = await bcrypt.hash(passwordToHash, salt);
+      
+      if (update.password) {
+        update.password = hashedPassword;
+      }
+      if (update.$set && update.$set.password) {
+        update.$set.password = hashedPassword;
+      }
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
 });
 
 // Compare password method
