@@ -19,7 +19,7 @@ const sendOtpMail = async (email, otp) => {
     from: process.env.EMAIL_USER,
     to: email,
     subject: "OTP for Password Reset",
-    text: `Your OTP is ${otp}. It expires in 30 seconds.`,
+    text: `Your OTP is ${otp}. It expires in 120 seconds.`,
   };
 
   return transporter.sendMail(mailOptions);
