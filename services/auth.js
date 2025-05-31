@@ -109,6 +109,7 @@ const OtpSend = async (email) => {
       success: true,
       status: 200,
       message: "OTP sent to email",
+      data:{uid:user?.uid}
     };
   } catch (err) {
     return { status: 500, message: "Something went wrong", error: err.message };
