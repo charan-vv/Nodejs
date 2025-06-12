@@ -4,8 +4,10 @@ const router=express.Router()
 // controller
 const authController =require('../controllers/authController')
 const dashboardController =require('../controllers/dashboardController')
+const transactionsController =require('../controllers/transactionsController')
 // Authentication
 const authenticationToken =require('../middlewares/authentication')
+
 
 
 // auth route
@@ -22,6 +24,18 @@ router.delete('/hard/user/:id',authenticationToken,authController.hardDelete_req
 
 // other routers
 router.get('/dashboard',authenticationToken,dashboardController.dashboard_get)
+
+
+// Budget routers
+
+
+// transactions routers
+
+router.get('/transaction/list',authenticationToken,transactionsController.transaction_list)
+router.post('transaction/create',authenticationToken,transactionsController.transaction_create)
+router.put('transaction/update/:id',authenticationToken,transactionsController.transaction_update)
+router.delete('transaction/soft/:id',authenticationToken,transactionsController.transaction_soft_delete)
+router.delete('transaction/hard/:id',authenticationToken,transactionsController.transaction_hard_delete)
 
 
 module.exports=router
