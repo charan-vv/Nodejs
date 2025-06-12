@@ -60,7 +60,7 @@ const Otp_request = async (req, res) => {
       code: result.status,
       success: result?.success,
       message: result.message,
-      ...(result?.error && { error: result.error }),
+      data:result.data,
     });
   } catch (err) {
     res.status(500).json({
@@ -82,7 +82,6 @@ const verifyotp_request = async (req, res) => {
       code: result.status,
       success: result?.success,
       message: result.message,
-      ...(result?.error && { error: result.error }),
     });
   } catch (err) {
     res.status(500).json({

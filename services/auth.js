@@ -81,7 +81,7 @@ const signup = async (data) => {
   }
 };
 
-// forget opt
+// forget otp
 const OtpSend = async (email) => {
   try {
     if (!email) {
@@ -109,12 +109,14 @@ const OtpSend = async (email) => {
       success: true,
       status: 200,
       message: "OTP sent to email",
+      data:{uid:user?.uid}
     };
   } catch (err) {
     return { status: 500, message: "Something went wrong", error: err.message };
   }
 };
 
+// verified otp
 const verifyOtp = async (email, otp) => {
   try {
     const data = otpStore.get(email);
@@ -182,7 +184,6 @@ const userSoftDelete = async (uid) => {
 };
 
 // user Hard Delte
-
 const userHardDelete = async (uid) => {
   const user = await users.findOne({ uid: uid });
   if (user) {
