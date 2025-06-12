@@ -158,7 +158,7 @@ const userUpdate = async (uid, data) => {
     return { success: true, status: 200, message: "User Details Update Successfully" };
   } else {
     return {
-      false: true,
+      success: false,
       status: 400,
       message: "User With the give id not found",
     };
