@@ -1,126 +1,108 @@
+const transactions = require("../models/transactions");
 const {
   list_request,
   create_request,
   update_request,
-  soft_delete,
-  hard_delete,
-} = require("../services/transactions.js");
-
-const {extractToken} =require("../middlewares/tokenExtraction.js")
+  softDelete_request,
+  hardDelete_request,
+} = require("../services/curd");
+const {
+  internal_Server_Response,
+  response,
+  no_token_response,
+} = require("../helpers/response");
+const { extractToken } = require("../helpers/userDetails");
 
 const transaction_list = async (req, res) => {
   try {
     const token = extractToken(req);
-    
+
     if (!token) {
-      return res.status(401).json({
-        success: false,
-        code: 401,
-        message: "Access token is required"
-      });
+      no_token_response(res);
     }
-
-    // Extract filters from query parameters
-    const filters = {
-      status: req.query.status,
-      dateFrom: req.query.dateFrom,
-      dateTo: req.query.dateTo,
-      page: req.query.page,
-      limit: req.query.limit
-    };
-
-    const result = await list_request(token, filters);
-    
-    res.status(result?.status).json({
-      success: result?.success,
-      code: result?.status,
-      message: result?.message,
-      data: result?.data || null,
-      count: result?.count || 0
-    });
+    const filters = {};
+    const result = await list_request(
+      token,
+      filters,
+      transactions,
+      "Transaction"
+    );
+    response(res, result);
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      error: err?.message,
-      success: false,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res, err);
   }
 };
+
 const transaction_create = async (req, res) => {
   try {
+    const token = extractToken(req);
+
+    if (!token) {
+      no_token_response(res);
+    }
     const data = req.body;
-    const result = await create_request(data);
-    res.status(result?.status).json({
-      success: result?.success,
-      code: result?.status,
-      message: result?.message,
-    });
+    const result = await create_request(
+      token,
+      data,
+      transactions,
+      "Transaction"
+    );
+    response(res, result);
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      error: err?.message,
-      success: false,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res, err);
   }
 };
 
 const transaction_update = async (req, res) => {
   try {
+    const token = extractToken(req);
+
+    if (!token) {
+      no_token_response(res);
+    }
     const uid = req.params.id;
     const data = req.body;
-    const result = await update_request(uid, data);
-    res.status(result?.status).json({
-      success: result?.success,
-      code: result?.status,
-      message: result?.message,
-    });
+    const result = await update_request(
+      token,
+      uid,
+      data,
+      transactions,
+      "Transaction"
+    );
+    response(res, result);
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      error: err?.message,
-      success: false,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res, err);
   }
 };
 
 const transaction_soft_delete = async (req, res) => {
   try {
+    const token = extractToken(req);
+
+    if (!token) {
+      no_token_response(res);
+    }
+
     const uid = req.params.id;
-    const result = await soft_delete(uid);
-    res.status(result?.status).json({
-      success: result?.success,
-      code: result?.status,
-      message: result?.message,
-    });
+    const result = await softDelete_request(
+      token,
+      uid,
+      transactions,
+      "Transaction"
+    );
+    response(res, result);
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      error: err?.message,
-      success: false,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res, err);
   }
 };
 
 const transaction_hard_delete = async (req, res) => {
   try {
     const uid = req.params.id;
-    const result = await hard_delete(uid);
-    res.status(result?.status).json({
-      success: result?.success,
-      code: result?.status,
-      message: result?.message,
-    });
+    const result = await hardDelete_request(uid, transactions, "Transaction");
+    response(res, result);
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      error: err?.message,
-      success: false,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res, err);
   }
 };
 

@@ -8,8 +8,10 @@ const transactions_schema = new mongoose.Schema({
   category: { type: String, required: true },
   amount: { type: Number, required: true },
   created_at: { type: Date, default: Date.now },
-  created_by: { type: Number, default: 1 },
+  created_by: { type: String,  },
+  updated_by: { type: String,  },
   is_deleted: { type: Boolean, default: false },
+  updated_at:{ type: Date, default: Date.now }
 });
 
 

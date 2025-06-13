@@ -7,26 +7,16 @@ const {
   userSoftDelete,
   userHardDelete,
 } = require("../services/auth");
+const {internal_Server_Response,response} =require("../helpers/response")
 
 // login
 const login_request = async (req, res) => {
   try {
     const data = req.body;
     const result = await login(data);
-    res.status(result?.status).json({
-      success: result?.success,
-      code: result?.status,
-      data: result?.data,
-      token: result?.token,
-      message: result?.message,
-    });
+    response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      error: err?.message,
-      success:false,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res,err)
   }
 };
 
@@ -35,19 +25,9 @@ const signup_request = async (req, res) => {
   try {
     const data = req.body;
     const result = await signup(data);
-    res.status(result.status).json({
-      success: result?.success,
-      code: result.status,
-      data: result.data,
-      message: result?.message,
-    });
+    response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      success:false,
-      error: err?.message,
-      message: "Internal Server Error",
-    });
+    internal_Server_Response(res,err)
   }
 };
 
@@ -56,19 +36,9 @@ const Otp_request = async (req, res) => {
   try {
     const { email_id } = req.body;
     const result = await OtpSend(email_id);
-    res.status(result.status).json({
-      code: result.status,
-      success: result?.success,
-      message: result.message,
-      data:result.data,
-    });
+    response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      success:false,
-      message: "Internal Server Error",
-      error: err?.message,
-    });
+     internal_Server_Response(res,err)
   }
 };
 
@@ -78,18 +48,9 @@ const verifyotp_request = async (req, res) => {
   try {
     const { email_id, otp } = req.body;
     const result = await verifyOtp(email_id, otp);
-    res.status(result.status).json({
-      code: result.status,
-      success: result?.success,
-      message: result.message,
-    });
+    response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      success:false,
-      message: "Internal Server Error",
-      error: err.message,
-    });
+     internal_Server_Response(res,err)
   }
 };
 
@@ -100,19 +61,9 @@ const updateDetails_request = async (req, res) => {
     const user_uid = req.params.id;
     const data = req.body;
     const result = await userUpdate(user_uid, data);
-    res.status(result?.status).json({
-      code: result?.status,
-      success: result?.success,
-      message: result?.message,
-      data: result?.data,
-    });
+     response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      success:false,
-      message: "Internal Server Error",
-      error: err?.message,
-    });
+    internal_Server_Response(res,err)
   }
 };
 
@@ -120,16 +71,9 @@ const softDelete_request = async (req, res) => {
   try {
     const user_uid = req.params.id;
     const result = await userSoftDelete(user_uid);
-    res
-      .status(result?.status)
-      .json({success: result?.success, code: result?.status, message: result?.message });
+     response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      success:false,
-      message: "Internal Server Error",
-      error: err?.message,
-    });
+    internal_Server_Response(res,err)
   }
 };
 
@@ -137,19 +81,9 @@ const hardDelete_request = async (req, res) => {
   try {
     const user_uid = req.params.id;
     const result = await userHardDelete(user_uid);
-    res.status(result?.status).json({
-      code: result?.status,
-      message: result?.message,
-      data: result?.data,
-      success: result?.success,
-    });
+    response(res,result)
   } catch (err) {
-    res.status(500).json({
-      code: 500,
-      success:false,
-      message: "Internal Server Error",
-      error: err?.message,
-    });
+     internal_Server_Response(res,err)
   }
 };
 
