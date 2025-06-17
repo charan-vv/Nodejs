@@ -154,7 +154,7 @@ const verifyOtp = async (email, otp) => {
 const userUpdate = async (uid, data) => {
   const user = await users.findOne({ uid: uid });
   if (user) {
-    await user.updateOne(data);
+     await user.updateOne({uid:uid},{$set:data});
     return { success: true, status: 200, message: "User Details Update Successfully" };
   } else {
     return {
@@ -172,7 +172,7 @@ const userSoftDelete = async (uid) => {
     const data = {
       is_deleted: true,
     };
-    await user.updateOne(data);
+     await user.updateOne({uid:uid},{$set:data});
     return { success: true, status: 200, message: "User Deleted Successfully" };
   } else {
     return {
@@ -187,7 +187,7 @@ const userSoftDelete = async (uid) => {
 const userHardDelete = async (uid) => {
   const user = await users.findOne({ uid: uid });
   if (user) {
-    await user.deleteOne(user);
+    await user.deleteOne({ uid: uid });
     return { success: true, status: 200, message: "User Deleted Successfully" };
   } else {
     return {

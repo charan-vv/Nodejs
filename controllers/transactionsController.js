@@ -41,6 +41,7 @@ const transaction_create = async (req, res) => {
       no_token_response(res);
     }
     const data = req.body;
+    
     const result = await create_request(
       token,
       data,
@@ -48,6 +49,7 @@ const transaction_create = async (req, res) => {
       "Transaction"
     );
     response(res, result);
+    
   } catch (err) {
     internal_Server_Response(res, err);
   }
@@ -70,6 +72,7 @@ const transaction_update = async (req, res) => {
       "Transaction"
     );
     response(res, result);
+   
   } catch (err) {
     internal_Server_Response(res, err);
   }

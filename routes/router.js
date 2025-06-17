@@ -25,7 +25,7 @@ router.delete('/soft/user/:id',authenticateToken,authController.softDelete_reque
 router.delete('/hard/user/:id',authenticateToken,authController.hardDelete_request)
 
 
-// dashboard routers
+// dashboard routers    
 router.get('/dashboard',authenticateToken,dashboardController.dashboard_get)
 
 
@@ -52,6 +52,11 @@ router.post('/category/create',authenticateToken,categoriesController.create)
 router.put('/category/update/:id',authenticateToken,categoriesController.update)
 router.delete('/category/soft/:id',authenticateToken,categoriesController.soft_delete)
 router.delete('/category/hard/:id',authenticateToken,categoriesController.hard_delete)
+
+
+// settings
+router.get('/user/:id',authenticateToken,authController.User_request)
+
 
 
 
