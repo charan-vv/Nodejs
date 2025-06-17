@@ -118,10 +118,36 @@ const hardDelete_request = async (uid, table, name) => {
   }
 };
 
+
+const view_details_request =async (uid,table,name)=>{
+  try{
+    const existing_data = await table.findOne({uid:uid})
+    if(existing_data){
+      return {
+        success: true,
+        status: 200,
+        data:existing_data,
+        message: `${name} is retrevied successfully`,
+      };
+
+    }else{
+      return {
+        success: false,
+        status: 400,
+        message: `${name} is not found `,
+      };
+    }
+
+  }catch (err){
+    return err
+  }
+}
+
 module.exports = {
   list_request,
   create_request,
   update_request,
   softDelete_request,
   hardDelete_request,
+  view_details_request,
 };

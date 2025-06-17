@@ -7,7 +7,9 @@ const {
   userSoftDelete,
   userHardDelete,
 } = require("../services/auth");
+const {view_details_request} =require ('../services/curd')
 const {internal_Server_Response,response} =require("../helpers/response")
+const users = require("../models/auth");
 
 // login
 const login_request = async (req, res) => {
@@ -87,6 +89,17 @@ const hardDelete_request = async (req, res) => {
   }
 };
 
+
+const User_request =async(req,res)=>{
+  try{
+    const user_uid =req.params.id;
+    const result =await view_details_request (user_uid,users,"User")
+    response (res,result)
+  }catch(err){
+    internal_Server_Response(res,err)
+  }
+}
+
 module.exports = {
   login_request,
   signup_request,
@@ -95,4 +108,5 @@ module.exports = {
   updateDetails_request,
   softDelete_request,
   hardDelete_request,
+  User_request
 };

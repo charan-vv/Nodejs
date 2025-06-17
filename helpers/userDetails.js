@@ -11,9 +11,12 @@ const extractToken = (req) => {
   return null;
 };
 
+
+
+
 const verifyToken = (token) => {
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Make sure to set JWT_SECRET in your env
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); 
     return { success: true, decoded };
   } catch (err) {
     return { success: false, error: err.message };
@@ -21,12 +24,14 @@ const verifyToken = (token) => {
 };
 
 
+
+
+
 const user_detail =(token)=>{
     const tokenVerification = verifyToken(token); 
         if (!tokenVerification.success) {
             token_verification_return()
         }
-  
         const decoded = tokenVerification.decoded;
         return  decoded
 }

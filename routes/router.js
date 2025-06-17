@@ -17,6 +17,7 @@ const {authenticateToken} =require('../middlewares/authentication')
 // auth route
 router.post('/login',authController.login_request)
 router.post('/signup',authController.signup_request)
+router.get('/user/:id',authenticateToken,authController.User_request)
 router.post('/get-otp',authController.Otp_request)
 router.post('/verify-otp',authController.verifyotp_request)
 router.post('/reset-password/:id',authController.updateDetails_request)
@@ -25,7 +26,7 @@ router.delete('/soft/user/:id',authenticateToken,authController.softDelete_reque
 router.delete('/hard/user/:id',authenticateToken,authController.hardDelete_request)
 
 
-// dashboard routers
+// dashboard routers    
 router.get('/dashboard',authenticateToken,dashboardController.dashboard_get)
 
 
