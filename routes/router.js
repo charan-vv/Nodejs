@@ -17,7 +17,6 @@ const {authenticateToken} =require('../middlewares/authentication')
 // auth route
 router.post('/login',authController.login_request)
 router.post('/signup',authController.signup_request)
-router.get('/user/:id',authenticateToken,authController.User_request)
 router.post('/get-otp',authController.Otp_request)
 router.post('/verify-otp',authController.verifyotp_request)
 router.post('/reset-password/:id',authController.updateDetails_request)
@@ -53,6 +52,11 @@ router.post('/category/create',authenticateToken,categoriesController.create)
 router.put('/category/update/:id',authenticateToken,categoriesController.update)
 router.delete('/category/soft/:id',authenticateToken,categoriesController.soft_delete)
 router.delete('/category/hard/:id',authenticateToken,categoriesController.hard_delete)
+
+
+// settings
+router.get('/user/:id',authenticateToken,authController.User_request)
+
 
 
 
