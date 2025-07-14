@@ -3,13 +3,15 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require('cors');
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger"); // <-- swagger config file
 const connectDB = require("./config/db");
 
 const custome_routes = require("./routes/router");
 
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5174',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Use an array
     allowedHeaders: ['Content-Type', 'Authorization']
 };
@@ -26,6 +28,7 @@ connectDB();
 
 // using routes
 app.use("/budget/backend/v1", custome_routes);
+app.use("/budget/backend/v1/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 
